@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="qa-analytics-insights" errors="0" failures="1" skipped="1" tests="3" time="1.891" timestamp="2023-08-25T15:52:16.943175" hostname="ITSEHBG-DN0059"><testcase classname="qa-analytics-insights.tests.test_xml_filter" name="test_filter_xml" time="0.007"><system-out>--------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="qa-analytics-insights.tests.test_xml_parser" name="test_parse_xml" time="0.011"><failure message="AssertionError: assert 'qa-analytics-insights' == 'nosetests'&#10;  - nosetests&#10;  + qa-analytics-insights">Traceback (most recent call last):
+  File "/home/.local/share/hatch/env/virtual/qa-analytics-insights/aMWydHi2/qa-analytics-insights/lib/python3.11/site-packages/_pytest/runner.py", line 341, in from_call
+    result: Optional[TResult] = func()
+                                ^^^^^^
+  File "/home/.local/share/hatch/env/virtual/qa-analytics-insights/aMWydHi2/qa-analytics-insights/lib/python3.11/site-packages/_pytest/runner.py", line 262, in &lt;lambda&gt;
+    lambda: ihook(item=item, **kwds), when=when, reraise=reraise
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/qa-analytics-insights/lib/python3.11/site-packages/pluggy/_hooks.py", line 433, in __call__
+    return self._hookexec(self.name, self._hookimpls, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/qa-analytics-insights/lib/python3.11/site-packages/pluggy/_manager.py", line 112, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/qa-analytics-insights/lib/python3.11/site-packages/pluggy/_callers.py", line 155, in _multicall
+    return outcome.get_result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/qa-analytics-insights/lib/python3.11/site-packages/pluggy/_result.py", line 108, in get_result
+    raise exc.with_traceback(exc.__traceback__)
+  File "/qa-analytics-insights/lib/python3.11/site-packages/pluggy/_callers.py", line 80, in _multicall
+    res = hook_impl.function(*args)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/qa-analytics-insights/lib/python3.11/site-packages/_pytest/runner.py", line 177, in pytest_runtest_call
+    raise e
+  File "/qa-analytics-insights/lib/python3.11/site-packages/_pytest/runner.py", line 169, in pytest_runtest_call
+    item.runtest()
+  File "/qa-analytics-insights/lib/python3.11/site-packages/_pytest/python.py", line 1788, in runtest
+    self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+  File "/qa-analytics-insights/lib/python3.11/site-packages/pluggy/_hooks.py", line 433, in __call__
+    return self._hookexec(self.name, self._hookimpls, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/qa-analytics-insights/lib/python3.11/site-packages/pluggy/_manager.py", line 112, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/qa-analytics-insights/lib/python3.11/site-packages/pluggy/_callers.py", line 116, in _multicall
+    raise exception.with_traceback(exception.__traceback__)
+  File "/qa-analytics-insights/lib/python3.11/site-packages/pluggy/_callers.py", line 80, in _multicall
+    res = hook_impl.function(*args)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/qa-analytics-insights/lib/python3.11/site-packages/_pytest/python.py", line 194, in pytest_pyfunc_call
+    result = testfunction(**testargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/qa-analytics-insights/tests/test_xml_parser.py", line 17, in test_parse_xml
+    assert test_suite.name == "nosetests"
+AssertionError: assert 'qa-analytics-insights' == 'nosetests'
+  - nosetests
+  + qa-analytics-insights</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase></testsuite></testsuites>
