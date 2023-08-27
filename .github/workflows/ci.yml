@@ -1,0 +1,151 @@
+name: CI/CD Builds
+
+on:
+  push:
+    # Avoid using all the resources/limits available by checking only
+    # relevant branches and tags. Other branches can be checked via PRs.
+    branches: [main]
+    tags: ['v[0-9]*', '[0-9]+.[0-9]+*']  # Match tags that resemble a version
+  pull_request:  # Run in every PR
+  workflow_dispatch:  # Allow manually triggering the workflow
+  schedule:
+    # Run roughly every 15 days at 00:00 UTC
+    # (useful to check if updates on dependencies break the package)
+    - cron: '0 0 1,16 * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: >-
+    ${{ github.workflow }}-${{ github.ref_type }}-
+    ${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    name: ${{ matrix.hatch-envs }} on linux
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        hatch-envs: [docs, linter]
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with: {fetch-depth: 0}
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    - name: Run hatch envs ${{ matrix.hatch-envs }}
+      run: |
+        pip install hatch
+        hatch build --hooks-only
+        hatch run ${{ matrix.hatch-envs }}:all
+
+  test:
+    name: Unit tests on linux
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-versions: [3.9, 3.10.12, 3.11]
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with: {fetch-depth: 0}  # deep clone for setuptools-scm
+
+      - name: Set up Python ${{ matrix.python-versions }}
+        uses: actions/setup-python@v4
+        with:
+            python-version: ${{ matrix.python-versions }}
+
+      - name: Run unit tests ${{ matrix.python-versions }}
+        run: |
+          pip install hatch
+          hatch build --hooks-only
+          hatch run default:all
+
+  build:
+    needs: [prepare, test]
+    name: Build on linux
+    runs-on: ubuntu-latest
+    outputs:
+      wheel-distribution: ${{ steps.wheel-distribution.outputs.path }}
+    strategy:
+      fail-fast: false
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with: {fetch-depth: 0}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Build package
+        run: |
+          pip install hatch
+          hatch build
+
+      - name: Upload wheel distribution file as artifacts
+        id: wheel-distribution
+        uses: actions/upload-artifact@v3
+        with:
+          name: python-distribution-files
+          path: dist/
+
+  publish:
+    needs: build
+    name: Publish on PyPI
+    if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+    environment: Production
+    permissions:
+      contents: write
+      id-token: write
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Retrieve pre-built distribution files
+        uses: actions/download-artifact@v3
+        with: {name: python-distribution-files, path: dist/}
+      - name: Publish Package To PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+  deploy:
+    needs: publish
+    name: Deploy to Anaconda
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          channels: conda-forge
+          auto-update-conda: false
+          auto-activate-base: true
+          python-version: 3.11
+      - name: Deploy Package To conda-forge
+        run: |
+          conda install conda-build conda-verify
+          conda build conda-recipe

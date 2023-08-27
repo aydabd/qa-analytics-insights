@@ -1,0 +1,224 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "qa-analytics-insights"
+dynamic = ["version"]
+description = "Analyze and visualize Quality Assurance data"
+readme = "README.rst"
+requires-python = ">=3.9"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Aydin Abdi", email = "ayabd18@ingka.com" },
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Utilities",
+  "Typing :: Typed",
+]
+dependencies = [
+    "matplotlib",
+    "loguru",
+]
+
+[project.scripts]
+qa-analytics-insights = "qa_analytics_insights.cli:main"
+
+[project.urls]
+Documentation = "https://github.com/unknown/qa-analytics-insights#readme"
+Issues = "https://github.com/unknown/qa-analytics-insights/issues"
+Source = "https://github.com/unknown/qa-analytics-insights"
+
+[tool.hatch.version]
+source = "vcs"
+[tool.hatch.build.hooks.vcs]
+version-file = "src/qa_analytics_insights/_version.py"
+
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.9", "3.10", "3.11"]
+
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+  "pytest-mock",
+  "pytest-cov",
+  "pytest-xdist",
+  "pytest-metadata",
+]
+[tool.hatch.envs.default.scripts]
+test-cov = "pytest -n auto"
+all = [
+  "test-cov",
+]
+
+[tool.hatch.envs.develop]
+[tool.hatch.envs.develop.scripts]
+insights-help = "qa-analytics-insights --help"
+insights-version = "qa-analytics-insights --version"
+insights = "qa-analytics-insights -f tests/data -o outputs/insights_results"
+all = [
+  "insights-help",
+  "insights-version",
+  "insights",
+]
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s %(levelname)s %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+log_file_level = "DEBUG"
+log_file_format = "%(asctime)s %(levelname)s %(message)s"
+log_file_date_format = "%Y-%m-%d %H:%M:%S"
+junit_suite_name = "qa-analytics-insights"
+junit_logging = "system-out"
+addopts = [
+  "-rf",
+  "--strict-markers",
+  "--cov=qa_analytics_insights",
+  "--cov-report=term-missing",
+  "--cov-report=xml",
+  "--cov-report=html",
+  "--junitxml=outputs/pytests.xml",
+  "--junitprefix=qa-analytics-insights",
+  "--color=yes",
+  "-vv",
+]
+
+
+[tool.coverage.run]
+data_file = "outputs/.coverage"
+branch = true
+parallel = true
+omit = [
+  "**/site-packages/**",
+  "**/tests/**",
+  "**/distutils/**",
+]
+disable_warnings = ["no-data-collected"]
+[tool.coverage.paths]
+source = ["src/", "*/site-packages/"]
+[tool.coverage.report]
+# fail_under = 100
+precision = 0
+show_missing = true
+skip_covered = false
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "pragma: no cover",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "return NotImplemented",
+  "return NotImplementedError",
+]
+[tool.coverage.html]
+directory = "outputs/htmlcov"
+title = "HTMLCoverage"
+[tool.coverage.xml]
+output = "outputs/coverage.xml"
+
+
+[tool.hatch.envs.docs]
+dependencies = [
+  "sphinx",
+  "sphinx-autodoc-typehints",
+  "sphinx-rtd-theme",
+  "sphinx-autobuild",
+  "docutils",
+]
+[tool.hatch.envs.docs.scripts]
+build = "sphinx-build -W --keep-going --color -b html docs docs/_build"
+serve = "sphinx-autobuild --open-browser --watch src/qa_analytics_insights --watch docs docs docs/_build/html"
+all = [
+  "build"
+]
+
+[tool.hatch.envs.github]
+dependencies = [
+  "ghp-import",
+  "sphinx",
+  "sphinx-autodoc-typehints",
+  "sphinx-rtd-theme==0.5.2",
+]
+[tool.hatch.envs.github.scripts]
+github = [
+  "rm -rf docs/_build",
+  "sphinx-build -b html docs docs/_build",
+  "ghp-import -n -p -f docs/_build",
+]
+all = [
+  "github",
+]
+
+[tool.hatch.envs.linter]
+detached = true
+dependencies = [
+  "pre-commit",
+]
+[tool.hatch.envs.linter.scripts]
+linter = "pre-commit run --all-files"
+all = [
+  "linter",
+]
+
+[tool.black]
+target-version = ["py39", "py310", "py311"]
+line-length = 88
+skip-string-normalization = true
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+    \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.nox
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | foo.py
+)
+'''
+
+[tool.isort]
+profile = "black"
+src_paths = ["src/qa_analytics_insights", "tests"]
+skip_gitignore = true
+skip = "venv,.venv"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+known_first_party = "qa_analytics_insights"
+known_third_party = "matplotlib,loguru"
+
+[tool.mypy]
+python_version = "3.9"
+no_implicit_optional = true
+cache_dir = ".mypy_cache"
+files = ["src/qa_analytics_insights", "tests"]
+ignore_missing_imports = true

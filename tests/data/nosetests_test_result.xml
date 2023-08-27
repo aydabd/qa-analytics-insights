@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="nosetests" tests="6" errors="1" failures="1" skip="1" time="24.32">
+<timestamp>2023-08-29T12:00:00</timestamp>
+<testcase name="test_method1" classname="MyTestCase.TestMethod1" time="0.02">
+    <failure message="Expected 1, got 2">
+    <system-out>
+        Traceback (most recent call last):
+        File "test_my_module.py", line 10, in test_method1
+            assert 1 == 2
+        AssertionError: 1 != 2
+    </system-out>
+    </failure>
+</testcase>
+<testcase name="test_method2" classname="MyTestCase.TestMethod2" time="0.3">
+    <error message="An error occurred">
+    <system-out>
+        Traceback (most recent call last):
+        File "test_my_module.py", line 20, in test_method2
+            raise ValueError("This is an error")
+        ValueError: This is an error
+    </system-out>
+    </error>
+</testcase>
+<testcase name="test_method3" classname="MyTestCase.TestMethod3" time="4.000">
+    <system-out>
+    This is a passing test case.
+    </system-out>
+</testcase>
+<testcase name="test_method4" classname="MyTestCase.TestMethod4" time="5.000">
+    <skipped message="This is a skipped test case">
+    <system-out>
+        This is a skipped test case.
+    </system-out>
+    </skipped>
+</testcase>
+<testcase name="test_method5" classname="MyTestCase.TestMethodWithTimeStamp" time="6.000">
+    <system-out>
+    20240823 20:38:03 - INFO - This is a test case with a timestamp.
+        testname
+        objective
+        Jira: N/A
+        service
+        Test steps:
+            1. XXXXXXXXXXXXXXXXXX
+            2. XXXXXXXXXXXXXXXXXX
+            3. XXXXXXXXXXXXXXXXXX
+    </system-out>
+</testcase>
+<testcase name="test_method6_without_classname" time="7.000">
+    <system-out>
+    This is a test case without classname.
+    </system-out>
+</testcase>
+</testsuite>
