@@ -26,8 +26,6 @@ jobs:
   prepare:
     name: ${{ matrix.hatch-envs }} on linux
     runs-on: ubuntu-latest
-    outputs:
-      docs-path: ${{ steps.build-docs.outputs.docs-path }}
     strategy:
       fail-fast: false
       matrix:
@@ -80,7 +78,6 @@ jobs:
     name: Build on linux
     runs-on: ubuntu-latest
     outputs:
-      python-path: ${{ steps.setup-python.outputs.python-path }}
       wheel-distribution: ${{ steps.wheel-distribution.outputs.path }}
     strategy:
       fail-fast: false
@@ -94,14 +91,17 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
 
       - name: Build package
         run: |
           pip install hatch
           hatch build
 
-      - name: Upload distribution files as artifacts
-        uses: actions/upload-artifact@v2
+      - name: Upload wheel distribution file as artifacts
+        id: wheel-distribution
+        uses: actions/upload-artifact@v3
         with:
           name: python-distribution-files
           path: dist/
@@ -111,27 +111,23 @@ jobs:
     name: Publish on PyPI
     if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
+    environment: Production
     permissions:
       contents: write
+      id-token: write
     defaults:
       run:
         shell: bash -el {0}
     steps:
       - name: Set up Python
         uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
       - name: Retrieve pre-built distribution files
         uses: actions/download-artifact@v3
         with: {name: python-distribution-files, path: dist/}
-      - name: Publish Package
-        env:
-          # TODO: Set your PYPI_TOKEN as a secret using GitHub UI
-          # - https://pypi.org/help/#apitoken
-          # - https://docs.github.com/en/actions/security-guides/encrypted-secrets
-          HATCH_INDEX_USER: __token__
-          HATCH_INDEX_AUTH: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          pip install hatch
-          hatch publish
+      - name: Publish Package To PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
   deploy:
     needs: publish
     name: Deploy to Anaconda
