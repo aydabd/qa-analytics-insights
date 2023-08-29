@@ -9,7 +9,18 @@ description = "Analyze and visualize Quality Assurance data"
 readme = "README.rst"
 requires-python = ">=3.9"
 license = "MIT"
-keywords = []
+keywords = [
+  "pytest", "nosetests", "testing",
+  "quality", "assurance", "qa",
+  "analytics", "insights", "visualize",
+  "data", "matplotlib", "loguru", "python",
+  "hatch", "hatchling", "hatch-vcs",
+  "sphinx", "sphinx-autodoc-typehints", "sphinx-rtd-theme",
+  "xml", "html", "coverage", "pytest-cov",
+  "pytest-xdist", "pytest-metadata", "pre-commit",
+  "black", "isort", "mypy", "pylint",
+  "conda", "pip", "pypi", "github",
+]
 authors = [
   { name = "Aydin Abdi", email = "ayabd18@ingka.com" },
 ]
@@ -19,7 +30,7 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: Implementation :: PyPy",
+  "Programming Language :: Python :: Implementation :: PyPi",
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Software Development :: Quality Assurance",
@@ -36,9 +47,9 @@ dependencies = [
 qa-analytics-insights = "qa_analytics_insights.cli:main"
 
 [project.urls]
-Documentation = "https://github.com/unknown/qa-analytics-insights#readme"
-Issues = "https://github.com/unknown/qa-analytics-insights/issues"
-Source = "https://github.com/unknown/qa-analytics-insights"
+Documentation = "https://readthedocs.org/projects/qa-analytics-insights/"
+Issues = "https://github.com/aydabd/qa-analytics-insights/issues"
+Source = "https://github.com/aydabd/qa-analytics-insights"
 
 [tool.hatch.version]
 source = "vcs"
