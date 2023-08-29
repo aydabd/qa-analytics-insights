@@ -147,5 +147,5 @@ jobs:
           python-version: 3.11
       - name: Deploy Package To conda-forge
         run: |
-          conda install conda-build conda-verify
+          conda install build conda-verify
           conda build conda-recipe

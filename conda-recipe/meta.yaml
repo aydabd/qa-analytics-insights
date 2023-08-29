@@ -18,14 +18,14 @@ build:
   script:
     - python -m pip install --no-deps --ignore-installed .
   entry_points:
-    - qa-analytics-insights = "qa_analytics_insights.cli:main"
+    - qa-analytics-insights = qa_analytics_insights.cli:main
 
 requirements:
   host:
     - pip
-    - python >=3.8
+    - python >=3.9
   run:
-    - python >=3.8
+    - python >=3.9
 
 test:
   imports:
