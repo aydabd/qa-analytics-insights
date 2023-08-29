@@ -128,24 +128,3 @@ jobs:
         with: {name: python-distribution-files, path: dist/}
       - name: Publish Package To PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-  deploy:
-    needs: publish
-    name: Deploy to Anaconda
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    defaults:
-      run:
-        shell: bash -el {0}
-    steps:
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          channels: conda-forge
-          auto-update-conda: false
-          auto-activate-base: true
-          python-version: 3.11
-      - name: Deploy Package To conda-forge
-        run: |
-          conda install build conda-verify
-          conda build conda-recipe
