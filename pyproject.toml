@@ -46,7 +46,7 @@ dependencies = [
 qa-analytics-insights = "qa_analytics_insights.cli:main"
 
 [project.urls]
-Documentation = "https://readthedocs.org/projects/qa-analytics-insights/"
+Documentation = "https://qa-analytics-insights.readthedocs.io/en/latest/"
 Issues = "https://github.com/aydabd/qa-analytics-insights/issues"
 Source = "https://github.com/aydabd/qa-analytics-insights"
 
