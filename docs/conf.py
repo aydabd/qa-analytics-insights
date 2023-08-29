@@ -98,8 +98,13 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx_rtd_theme",
     "sphinx.ext.napoleon",
+    "sphinx_tabs.tabs",
+    "sphinx-prompt",
+    "sphinx_toolbox",
 ]
 
+github_username = "aydabd"
+github_repository = "qa-analytics-insights"
 autodoc_mock_imports = ["loguru"]
 # autodoc_typehints = "none"
 always_document_param_types = True

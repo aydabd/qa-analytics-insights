@@ -142,6 +142,7 @@ dependencies = [
   "sphinx-rtd-theme",
   "sphinx-autobuild",
   "docutils",
+  "sphinx-toolbox",
 ]
 [tool.hatch.envs.docs.scripts]
 build = "sphinx-build -W --keep-going --color -b html docs docs/_build"

@@ -1,14 +1,6 @@
 QA Analytics Insights
 =====================
 
-.. image:: https://img.shields.io/badge/qa_analytics_insights-<version>-blue
-    :alt: qa-analytics-insights release
-    :target: https://www.github.com/aydabd/qa-analytics-insights/releases
-
-.. image:: _static/badges/sphinx_badge.svg
-   :target: https://www.sphinx-doc.org/en/master/
-   :alt: Build by Sphinx
-
 .. image:: https://img.shields.io/github/downloads/aydabd/qa-analytics-insights/total
    :alt: GitHub all releases
    :target: https://www.github.com/aydabd/qa-analytics-insights/releases
