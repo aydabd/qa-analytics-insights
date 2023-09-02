@@ -15,7 +15,9 @@ Overview
 
 This repository hosts the source code for the `QA Analytics Insights`_ project,
 a robust command-line interface (CLI) tool designed to generate data-driven
-insights from QA (Quality Assurance) test results.
+insights from QA (Quality Assurance) test results. Test results are typically
+generated in XML format by test automation frameworks such as `pytest`_ and
+`unittest`_.
 
 ========
 Features
@@ -100,3 +102,5 @@ for running the tests with coverage, run the following command::
 
 .. _QA Analytics Insights : https://qa-analytics-insights.readthedocs.io/en/latest/
 .. _pypi: https://pypi.org/project/pip/qa-analytics-insights
+.. _pytest: https://docs.pytest.org/en/latest/
+.. _unittest: https://docs.python.org/3/library/unittest.html

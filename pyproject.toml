@@ -78,7 +78,7 @@ all = [
 [tool.hatch.envs.develop.scripts]
 insights-help = "qa-analytics-insights --help"
 insights-version = "qa-analytics-insights --version"
-insights = "qa-analytics-insights -f tests/data -o outputs/insights_results"
+insights = "qa-analytics-insights -f tests/data/ -o outputs/insights_results"
 all = [
   "insights-help",
   "insights-version",
