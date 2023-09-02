@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import List, Optional
 
 import matplotlib
+import numpy as np
 from loguru import logger
 from matplotlib import pyplot as plt
 
@@ -85,15 +86,23 @@ class ResultVisualizer:
         num_test_classes = len(self.test_classes)
         num_rows = math.ceil(math.sqrt(num_test_classes))
         num_cols = math.ceil(num_test_classes / num_rows)
-        pix_size_x = len(self.test_classes) * 2
-        pix_size_y = len(self.test_classes) / 2
 
-        pie_charts, axes = self.plot.subplots(
+        # Set a minimum size for the pie chart
+        min_size_x, min_size_y = 3, 3  # you can adjust these as needed
+        pix_size_x = max(min_size_x, num_test_classes * 2)
+        pix_size_y = max(min_size_y, num_test_classes / 2)
+
+        pie_charts, axs = self.plot.subplots(
             num_rows, num_cols, figsize=(pix_size_x, pix_size_y), clear=True
         )
-        axes = axes.flatten()
 
-        for ax, test_class in zip(axes, self.test_classes):
+        # Check if axs is an array and flatten it
+        if isinstance(axs, np.ndarray):
+            axs = axs.flatten()
+        elif isinstance(axs, plt.Axes):
+            axs = np.array([axs])
+
+        for ax, test_class in zip(axs, self.test_classes):
             statuses = {"skipped": 0, "failed": 0, "passed": 0, "error": 0}
             colors = {
                 "skipped": "gray",
@@ -121,7 +130,7 @@ class ResultVisualizer:
 
         # Remove unused subplots
         for i in range(num_test_classes, num_rows * num_cols):
-            pie_charts.delaxes(axes[i])
+            pie_charts.delaxes(axs[i])
 
         return pie_charts
 
@@ -191,14 +200,6 @@ class ResultVisualizer:
         """
         logger.info("Creating skipped test cases table.")
         all_skipped_tests = []
-        # if self.test_classes:
-        #     for test_class in self.test_classes:
-        #         all_skipped_tests.extend(
-        #             [
-        #                 (test_class.name, tc.name, tc.skipped_reason)
-        #                 for tc in test_class.skipped_test_cases
-        #             ]
-        #         )
 
         if self.test_cases:
             for test_case in self.test_cases:
@@ -264,13 +265,21 @@ class ResultVisualizer:
         if not slowest_test_classes or slowest_test_classes is None:
             logger.warning("No slowest test classes found.")
             return None
+
         labels = [test_class.name for test_class in slowest_test_classes]
         sizes = [test_class.execution_time for test_class in slowest_test_classes]
 
+        min_height = 5  # Set a minimum figure height
+        fig_height = max(min_height, len(labels))
+
         top_slowest_test_classes_pie_bar_chart, axes = self.plot.subplots(
-            figsize=(20, len(labels)), clear=True
+            figsize=(20, fig_height), clear=True
         )
-        axes.bar(labels, sizes, color="green")
+
+        # You can add variety to the color if you want
+        colors = ['green' for _ in labels]
+
+        axes.bar(labels, sizes, color=colors)
         axes.set_ylabel("Execution Time (seconds)", fontsize=12)
         axes.set_xlabel("Test Class", fontsize=12)
 
@@ -360,6 +369,7 @@ class ResultVisualizer:
                 test_suites_summary.append(
                     (
                         test_suite.name,
+                        test_suite.tests,
                         test_suite.passed,
                         test_suite.failures,
                         test_suite.skipped,
@@ -367,21 +377,65 @@ class ResultVisualizer:
                         test_suite.execution_time,
                     )
                 )
+            test_suites_summary.append(
+                (
+                    "Total",
+                    sum([test_suite.tests for test_suite in self.test_suites]),
+                    sum([test_suite.passed for test_suite in self.test_suites]),
+                    sum([test_suite.failures for test_suite in self.test_suites]),
+                    sum([test_suite.skipped for test_suite in self.test_suites]),
+                    sum([test_suite.errors for test_suite in self.test_suites]),
+                    sum([test_suite.execution_time for test_suite in self.test_suites]),
+                )
+            )
+            failure_rate = round(
+                sum(
+                    [
+                        test_suite.failures + test_suite.errors
+                        for test_suite in self.test_suites
+                    ]
+                )
+                / sum([test_suite.tests for test_suite in self.test_suites])
+                * 100,
+                2,
+            )
+            test_suites_summary.append(
+                (  # type: ignore
+                    "Failure rate",
+                    f"{failure_rate}%",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                )
+            )
 
         if not test_suites_summary:
             logger.warning("No test suites found.")
             return None
 
         lenght_test_suites_summary = len(test_suites_summary)
-        pixels_per_row = lenght_test_suites_summary * 2
-        pixels_per_column = lenght_test_suites_summary / 4
+
+        # Set a minimum size for the bar chart
+        min_size_x, min_size_y = 1, 1
+        pixels_per_row = max(min_size_x, lenght_test_suites_summary * 2)
+        pixels_per_column = max(min_size_y, lenght_test_suites_summary / 2)
 
         test_suites_summary_table, axes = self.plot.subplots(
             figsize=(pixels_per_row, pixels_per_column)
         )
         axes.axis('tight')
         axes.axis('off')
-        columns = ("Test Suite", "Passed", "Failed", "Skipped", "Errors", "Time")
+        columns = (
+            "Test Suite",
+            "Total",
+            "Passed",
+            "Failed",
+            "Skipped",
+            "Errors",
+            "Time",
+        )
         table = axes.table(
             cellText=test_suites_summary,
             colLabels=columns,
