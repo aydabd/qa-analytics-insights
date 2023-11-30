@@ -45,7 +45,7 @@ repos:
     args: [--check-filenames, --ignore-words-list=.codespell-whitelist.txt]
 
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.7.0
+  rev: v1.7.1
   hooks:
   - id: mypy
     exclude: ^tests/
