@@ -2,6 +2,7 @@
 
 This module is responsible for visualizing the results of the parsed TestClass objects.
 """
+
 from __future__ import annotations
 
 import base64

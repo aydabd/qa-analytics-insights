@@ -2,6 +2,7 @@
 
 Unit tests for XMLTagFinder class.
 """
+
 from xml.etree import ElementTree as ET
 
 import pytest

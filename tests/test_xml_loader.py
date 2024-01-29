@@ -2,6 +2,7 @@
 
 Unit tests for xml_loader.py module.
 """
+
 from xml.etree import ElementTree as ET
 
 import pytest

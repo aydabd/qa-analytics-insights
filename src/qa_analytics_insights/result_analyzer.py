@@ -3,6 +3,7 @@
 ResultAnalyzer implements the logic for analyzing the test results with
 different metrics which can be used to visualize the results.
 """
+
 from typing import List
 
 from qa_analytics_insights.data_classes import TestCase, TestClass, TestSuite

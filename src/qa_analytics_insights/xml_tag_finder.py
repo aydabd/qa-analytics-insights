@@ -2,6 +2,7 @@
 
 This module is responsible for finding XML tags in XML files.
 """
+
 from typing import List, Optional  # noqa F401
 from xml.etree import ElementTree as ET
 

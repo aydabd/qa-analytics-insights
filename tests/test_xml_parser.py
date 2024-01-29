@@ -2,6 +2,7 @@
 
 Unit-tests for the xml_parser module.
 """
+
 from qa_analytics_insights.xml_loader import XMLLoader
 from qa_analytics_insights.xml_parser import XMLParser
 from qa_analytics_insights.xml_tag_finder import XMLTagFinder
