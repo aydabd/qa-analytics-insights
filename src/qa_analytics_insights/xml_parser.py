@@ -2,6 +2,7 @@
 
 This module is responsible for parsing XML files into TestSuite objects.
 """
+
 from collections import defaultdict
 from typing import List  # noqa: F401
 from xml.etree import ElementTree as ET  # noqa: F401

@@ -3,6 +3,7 @@
 This module processes files in the given path in parallel and
 puts the xml files in a queue for further processing.
 """
+
 import threading
 from queue import Queue
 from typing import List  # noqa: F401

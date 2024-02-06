@@ -2,6 +2,7 @@
 
 Unit tests for patch_fetcher.py module.
 """
+
 from xml.etree import ElementTree as ET
 
 import pytest

@@ -2,6 +2,7 @@
 
 This module filters XML files from the given path queue.
 """
+
 from pathlib import Path
 from queue import Queue
 

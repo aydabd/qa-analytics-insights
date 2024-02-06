@@ -2,6 +2,7 @@
 
 This module is responsible for fetching paths from the given initial path.
 """
+
 from pathlib import Path
 from queue import Queue
 

@@ -2,6 +2,7 @@
 
 This module is responsible for logging.
 """
+
 import functools
 import sys
 import time

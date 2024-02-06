@@ -2,6 +2,7 @@
 
 Command line interface for the qa-analytics-insights package.
 """
+
 import argparse
 import sys
 from typing import List, Optional  # noqa: F401

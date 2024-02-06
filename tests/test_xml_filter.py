@@ -1,4 +1,5 @@
 """Unittests for the xml_filter module."""
+
 from pathlib import Path
 from queue import Queue
 

@@ -2,6 +2,7 @@
 
 Unit tests for log.py module.
 """
+
 import time
 
 from qa_analytics_insights.log import (

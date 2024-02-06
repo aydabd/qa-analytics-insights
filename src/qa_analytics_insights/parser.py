@@ -2,6 +2,7 @@
 
 This module is responsible for parsing test cases from XML tags.
 """
+
 import re
 from typing import Optional
 from xml.etree import ElementTree as ET
