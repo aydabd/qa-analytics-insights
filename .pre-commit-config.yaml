@@ -27,7 +27,7 @@ repos:
     language_version: python3
 
 - repo: https://github.com/asottile/blacken-docs
-  rev: 1.16.0
+  rev: 1.18.0
   hooks:
   - id: blacken-docs
     additional_dependencies: [black]
@@ -45,7 +45,7 @@ repos:
     args: [--check-filenames, --ignore-words-list=.codespell-whitelist.txt]
 
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.10.1
+  rev: v1.11.0
   hooks:
   - id: mypy
     exclude: ^tests/
