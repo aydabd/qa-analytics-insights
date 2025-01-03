@@ -15,7 +15,7 @@ def update_version_badge(app: object, doctree: object, docname: str) -> None:
     This function is called by Sphinx when the doctree-read event is emitted.
     This event is emitted when the doctree is read from disk and ready to be
     processed. See: https://www.sphinx-doc.org/en/master/extdev/appapi.html#sphinx-core-events
-    
+
     Args:
         app: The Sphinx application object.
         doctree: The document tree.
@@ -23,7 +23,7 @@ def update_version_badge(app: object, doctree: object, docname: str) -> None:
     """
     # Extract the version information from the package
     package_version = __version__
-    
+
     for image_node in doctree.traverse(nodes.image):
         original_url = image_node['uri']
 
@@ -33,7 +33,7 @@ def update_version_badge(app: object, doctree: object, docname: str) -> None:
             new_url = (
                 f"https://img.shields.io/badge/qa_analytics_insights-{package_version}-blue"
             )
-            
+
             # Update the image node URL
             image_node['uri'] = new_url
 
@@ -153,9 +153,7 @@ html_theme = "sphinx_rtd_theme"
 # documentation.
 html_theme_options = {
     "canonical_url": "",
-    "analytics_id": "UA-XXXXXXX-1",  #  Provided by Google in your dashboard
     "logo_only": False,
-    "display_version": True,
     "prev_next_buttons_location": "bottom",
     "style_external_links": False,
     "style_nav_header_background": "#2980B9",
