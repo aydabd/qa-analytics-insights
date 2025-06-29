@@ -7,7 +7,7 @@ name = "qa-analytics-insights"
 dynamic = ["version"]
 description = "Analyze and visualize Quality Assurance data"
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 license = "MIT"
 keywords = [
   "pytest", "nosetests", "testing",
@@ -57,7 +57,7 @@ version-file = "src/qa_analytics_insights/_version.py"
 
 
 [[tool.hatch.envs.all.matrix]]
-python = ["3.9", "3.10", "3.11"]
+python = ["3.11", "3.12", "3.13"]
 
 
 [tool.hatch.envs.default]
