@@ -99,7 +99,6 @@ extensions = [
     "sphinx_rtd_theme",
     "sphinx.ext.napoleon",
     "sphinx_tabs.tabs",
-    "sphinx-prompt",
     "sphinx_toolbox",
 ]
 

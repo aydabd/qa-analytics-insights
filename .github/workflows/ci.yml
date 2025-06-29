@@ -44,7 +44,9 @@ jobs:
     - name: Run hatch envs ${{ matrix.hatch-envs }}
       run: |
         pip install hatch
+        hatch env remove docs || true
         hatch build --hooks-only
+        hatch env create docs
         hatch run ${{ matrix.hatch-envs }}:all
 
   test:
