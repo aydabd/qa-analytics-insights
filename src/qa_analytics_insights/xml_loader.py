@@ -2,6 +2,7 @@
 
 This module is responsible for loading XML files.
 """
+
 from typing import Optional
 from xml.etree import ElementTree as ET
 
