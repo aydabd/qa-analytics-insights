@@ -41,6 +41,10 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: "3.11"
+    - name: Recreate docs env
+      run: hatch env remove docs || true
+    - name: Create docs env
+      run: hatch env create docs
     - name: Run hatch envs ${{ matrix.hatch-envs }}
       run: |
         pip install hatch
