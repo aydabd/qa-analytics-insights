@@ -147,7 +147,7 @@ output = "outputs/coverage.xml"
 
 [tool.hatch.envs.docs]
 dependencies = [
-  "sphinx",
+  "sphinx >= 7, <8",
   "sphinx-autodoc-typehints",
   "sphinx-rtd-theme",
   "sphinx-autobuild",
