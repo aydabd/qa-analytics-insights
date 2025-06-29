@@ -100,6 +100,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_tabs.tabs",
     "sphinx_toolbox",
+    "sphinx_prompt
 ]
 
 github_username = "aydabd"
