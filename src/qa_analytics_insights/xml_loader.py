@@ -2,9 +2,10 @@
 
 This module is responsible for loading XML files.
 """
-
-from typing import Optional  # noqa F401
+from typing import TYPE_CHECKING
 from xml.etree import ElementTree as ET
+if TYPE_CHECKING:
+    from xml.etree.ElementTree import ElementTree, Element
 
 
 class XMLLoader:
@@ -17,8 +18,8 @@ class XMLLoader:
             xml_path: Path to the XML file.
         """
         self.xml_path = xml_path
-        self._tree = None  # type: Optional[ET.ElementTree]
-        self._root = None  # type: Optional[ET.Element]
+        self._tree: ET.ElementTree | None = None
+        self._root: ET.Element | None = None
 
     @property
     def tree(self) -> ET.ElementTree:  # pragma: no cover
