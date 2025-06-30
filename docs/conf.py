@@ -98,6 +98,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx_rtd_theme",
     "sphinx.ext.napoleon",
+    "sphinx_prompt",
     "sphinx_tabs.tabs",
     "sphinx_toolbox",
 ]
