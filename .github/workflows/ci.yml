@@ -41,12 +41,17 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: "3.11"
+
     - name: Run hatch envs ${{ matrix.hatch-envs }}
       run: |
-        pip install hatch
-        hatch env remove docs || true
+        pip install --upgrade hatch
+        hatch env remove ${{ matrix.hatch-envs }} || true
         hatch build --hooks-only
-        hatch env create docs
+        hatch env create ${{ matrix.hatch-envs }}
+        # Fix for sphinx-prompt only for docs env
+        if [[ "${{ matrix.hatch-envs }}" == "docs" ]]; then
+          hatch run docs:pip install sphinx-prompt
+        fi
         hatch run ${{ matrix.hatch-envs }}:all
 
   test:
