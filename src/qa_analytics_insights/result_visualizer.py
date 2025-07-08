@@ -41,6 +41,23 @@ class ResultVisualizer:
         self._test_cases = []  # type: List[TestCase]
         self.plot = plt
 
+    @staticmethod
+    def truncate_name(name: str, max_length: int = 16) -> str:
+        """Truncate long names to prevent visualization overflow.
+        
+        Args:
+            name: The name to truncate.
+            max_length: Maximum allowed length (default: 16).
+            
+        Returns:
+            Truncated name with ellipsis if it was too long.
+        """
+        if name is None:
+            return "N/A"
+        if len(name) <= max_length:
+            return name
+        return name[:max_length-3] + "..."
+
     @property
     def test_classes(self) -> List[TestClass]:
         """Return the test classes.
@@ -126,7 +143,9 @@ class ResultVisualizer:
                 textprops={'fontsize': 6},
             )
             ax.axis('equal')
-            ax.set_title(f"{test_class.name}")
+            # Truncate long class names to prevent overflow
+            truncated_name = self.truncate_name(test_class.name)
+            ax.set_title(f"{truncated_name}")
             ax.legend(labels_with_counts, loc='upper right', fontsize=6)
 
         # Remove unused subplots
@@ -149,7 +168,7 @@ class ResultVisualizer:
                 if testcase.result == "failed" or testcase.result == "error":
                     all_failed_tests.append(
                         (
-                            testcase.test_class or "N/A",
+                            self.truncate_name(testcase.test_class or "N/A"),
                             testcase.name,
                             testcase.failure_reason or testcase.error_reason,
                         )
@@ -207,7 +226,7 @@ class ResultVisualizer:
                 if test_case.result == "skipped":
                     all_skipped_tests.append(
                         (
-                            test_case.test_class or "N/A",
+                            self.truncate_name(test_case.test_class or "N/A"),
                             test_case.name,
                             test_case.skipped_reason,
                         )
@@ -267,7 +286,7 @@ class ResultVisualizer:
             logger.warning("No slowest test classes found.")
             return None
 
-        labels = [test_class.name for test_class in slowest_test_classes]
+        labels = [self.truncate_name(test_class.name) for test_class in slowest_test_classes]
         sizes = [test_class.execution_time for test_class in slowest_test_classes]
 
         min_height = 5  # Set a minimum figure height
@@ -369,7 +388,7 @@ class ResultVisualizer:
             for test_suite in self.test_suites:
                 test_suites_summary.append(
                     (
-                        test_suite.name,
+                        self.truncate_name(test_suite.name),
                         test_suite.tests,
                         test_suite.passed,
                         test_suite.failures,
