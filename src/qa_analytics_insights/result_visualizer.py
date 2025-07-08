@@ -44,11 +44,11 @@ class ResultVisualizer:
     @staticmethod
     def truncate_name(name: str, max_length: int = 16) -> str:
         """Truncate long names to prevent visualization overflow.
-        
+
         Args:
             name: The name to truncate.
             max_length: Maximum allowed length (default: 16).
-            
+
         Returns:
             Truncated name with ellipsis if it was too long.
         """
@@ -56,7 +56,7 @@ class ResultVisualizer:
             return "N/A"
         if len(name) <= max_length:
             return name
-        return name[:max_length-3] + "..."
+        return name[: max_length - 3] + "..."
 
     @property
     def test_classes(self) -> List[TestClass]:
@@ -286,7 +286,9 @@ class ResultVisualizer:
             logger.warning("No slowest test classes found.")
             return None
 
-        labels = [self.truncate_name(test_class.name) for test_class in slowest_test_classes]
+        labels = [
+            self.truncate_name(test_class.name) for test_class in slowest_test_classes
+        ]
         sizes = [test_class.execution_time for test_class in slowest_test_classes]
 
         min_height = 5  # Set a minimum figure height
