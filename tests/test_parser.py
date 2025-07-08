@@ -1,5 +1,6 @@
 """Tests for parser module."""
 
+import re
 from unittest.mock import Mock, patch
 from xml.etree import ElementTree as ET
 
@@ -169,8 +170,236 @@ class TestParserTestCase:
         parser = ParserTestCase(root)
         
         # Mock the parsing method to raise an exception
-        with patch.object(parser, '_parse_failure_reason', side_effect=Exception("parse error")):
+        with patch.object(parser, 'get_failure_reason', side_effect=Exception("parse error")):
             test_case = parser.parse()
             
             # Should log warning about parsing failure
             assert mock_logger.warning.called
+
+    def test_get_testcase_result_passed(self):
+        """Test get_testcase_result for passed test."""
+        xml_content = """
+        <testcase name="test_example">
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_testcase_result()
+        assert result == "passed"
+
+    def test_get_testcase_result_failed(self):
+        """Test get_testcase_result for failed test."""
+        xml_content = """
+        <testcase name="test_example">
+            <failure message="test failed">Details</failure>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_testcase_result()
+        assert result == "failed"
+
+    def test_get_testcase_result_error(self):
+        """Test get_testcase_result for error test."""
+        xml_content = """
+        <testcase name="test_example">
+            <error message="runtime error">Details</error>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_testcase_result()
+        assert result == "error"
+
+    def test_get_testcase_result_skipped(self):
+        """Test get_testcase_result for skipped test."""
+        xml_content = """
+        <testcase name="test_example">
+            <skipped message="not applicable">Details</skipped>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_testcase_result()
+        assert result == "skipped"
+
+    def test_find_tag_attribute_with_attribute(self):
+        """Test find_tag_attribute method with attribute."""
+        xml_content = """
+        <testcase name="test_example">
+            <failure message="test failed">Details</failure>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.find_tag_attribute("failure", "message")
+        assert result == "test failed"
+
+    def test_find_tag_attribute_with_text(self):
+        """Test find_tag_attribute method with text."""
+        xml_content = """
+        <testcase name="test_example">
+            <failure message="test failed">Failure details</failure>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.find_tag_attribute("failure")
+        assert result == "Failure details"
+
+    def test_find_tag_attribute_tag_not_found(self):
+        """Test find_tag_attribute method when tag is not found."""
+        xml_content = """
+        <testcase name="test_example">
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.find_tag_attribute("failure")
+        assert result is None
+
+    def test_get_failure_reason_with_message(self):
+        """Test get_failure_reason method with message attribute."""
+        xml_content = """
+        <testcase name="test_example">
+            <failure message="AssertionError: test failed">Details</failure>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_failure_reason()
+        assert result == "AssertionError: test failed"
+
+    def test_get_failure_reason_multiline_message(self):
+        """Test get_failure_reason method with multiline message."""
+        xml_content = """
+        <testcase name="test_example">
+            <failure message="First line
+Second line
+Third line">Details</failure>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_failure_reason()
+        assert result == "First line"
+
+    @patch('qa_analytics_insights.parser.logger')
+    def test_get_failure_reason_no_message(self, mock_logger):
+        """Test get_failure_reason method when no message attribute."""
+        xml_content = """
+        <testcase name="test_example">
+            <failure>Details</failure>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_failure_reason()
+        assert result is None
+        mock_logger.debug.assert_called()
+
+    def test_get_skipped_reason_with_message(self):
+        """Test get_skipped_reason method with message attribute."""
+        xml_content = """
+        <testcase name="test_example">
+            <skipped message="Not applicable">Details</skipped>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_skipped_reason()
+        assert result == "Not applicable"
+
+    @patch('qa_analytics_insights.parser.logger')
+    def test_get_skipped_reason_no_message(self, mock_logger):
+        """Test get_skipped_reason method when no message attribute."""
+        xml_content = """
+        <testcase name="test_example">
+            <skipped>Details</skipped>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_skipped_reason()
+        assert result is None
+        mock_logger.debug.assert_called()
+
+    def test_get_timestamp_from_timestamp_tag(self):
+        """Test get_timestamp method from timestamp tag."""
+        xml_content = """
+        <testcase name="test_example">
+            <timestamp>2023-01-01T00:00:00</timestamp>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_timestamp()
+        assert result == "2023-01-01T00:00:00"
+
+    def test_get_timestamp_from_system_out(self):
+        """Test get_timestamp method from system-out tag."""
+        xml_content = """
+        <testcase name="test_example">
+            <system-out>20230101 12:34:56 - Some output</system-out>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_timestamp()
+        assert result == "20230101 12:34:56"
+
+    @patch('qa_analytics_insights.parser.logger')
+    def test_get_timestamp_not_found(self, mock_logger):
+        """Test get_timestamp method when timestamp not found."""
+        xml_content = """
+        <testcase name="test_example">
+            <system-out>Some output without timestamp</system-out>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_timestamp()
+        assert result is None
+        mock_logger.debug.assert_called()
+
+    def test_get_system_out(self):
+        """Test get_system_out method."""
+        xml_content = """
+        <testcase name="test_example">
+            <system-out>Console output here</system-out>
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_system_out()
+        assert result == "Console output here"
+
+    @patch('qa_analytics_insights.parser.logger')
+    def test_get_system_out_not_found(self, mock_logger):
+        """Test get_system_out method when system-out not found."""
+        xml_content = """
+        <testcase name="test_example">
+        </testcase>
+        """
+        root = ET.fromstring(xml_content)
+        parser = ParserTestCase(root)
+        
+        result = parser.get_system_out()
+        assert result is None
+        mock_logger.debug.assert_called()
