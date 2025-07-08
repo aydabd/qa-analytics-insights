@@ -169,7 +169,7 @@ class ParserTestCase:
                 return failure_reason
         except Exception as message_parse_exception:
             logger.warning(
-                f"Could not parse {tag} reason from {tag} message."
+                f"Could not parse {tag} reason from {tag} message. "
                 f"Exception: {message_parse_exception}"
             )
             logger.warning(f"Test case: {self.test_case.text}")
