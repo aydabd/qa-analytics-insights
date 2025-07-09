@@ -69,7 +69,7 @@ class TestTestClass:
         test_case1 = TestCase(name="test1", execution_time=1.0, result="passed")
         test_case2 = TestCase(name="test2", execution_time=2.0, result="passed")
         test_class = TestClass(name="TestExample", test_cases=[test_case1, test_case2])
-        
+
         assert test_class.passed == 2
         assert test_class.failed == 0
         assert test_class.skipped == 0
@@ -81,7 +81,7 @@ class TestTestClass:
         test_case1 = TestCase(name="test1", execution_time=1.0, result="failed")
         test_case2 = TestCase(name="test2", execution_time=2.0, result="failed")
         test_class = TestClass(name="TestExample", test_cases=[test_case1, test_case2])
-        
+
         assert test_class.passed == 0
         assert test_class.failed == 2
         assert test_class.skipped == 0
@@ -93,7 +93,7 @@ class TestTestClass:
         """Test TestClass with skipped test cases."""
         test_case1 = TestCase(name="test1", execution_time=1.0, result="skipped")
         test_class = TestClass(name="TestExample", test_cases=[test_case1])
-        
+
         assert test_class.passed == 0
         assert test_class.failed == 0
         assert test_class.skipped == 1
@@ -104,7 +104,7 @@ class TestTestClass:
         """Test TestClass with error test cases."""
         test_case1 = TestCase(name="test1", execution_time=1.0, result="error")
         test_class = TestClass(name="TestExample", test_cases=[test_case1])
-        
+
         assert test_class.passed == 0
         assert test_class.failed == 0
         assert test_class.skipped == 0

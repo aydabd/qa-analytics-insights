@@ -14,14 +14,14 @@ class TestParserTestSuite:
     def test_parse_basic_test_suite(self):
         """Test parsing a basic test suite XML element."""
         xml_content = """
-        <testsuite name="TestSuite" tests="5" errors="1" failures="2" 
+        <testsuite name="TestSuite" tests="5" errors="1" failures="2"
                    skipped="1" time="10.5" timestamp="2023-01-01T00:00:00">
         </testsuite>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestSuite(root)
         test_suite = parser.parse()
-        
+
         assert test_suite.name == "TestSuite"
         assert test_suite.tests == 5
         assert test_suite.errors == 1
@@ -33,14 +33,14 @@ class TestParserTestSuite:
     def test_parse_test_suite_with_skip_attribute(self):
         """Test parsing test suite with 'skip' attribute instead of 'skipped'."""
         xml_content = """
-        <testsuite name="TestSuite" tests="3" errors="0" failures="0" 
+        <testsuite name="TestSuite" tests="3" errors="0" failures="0"
                    skip="1" time="5.0">
         </testsuite>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestSuite(root)
         test_suite = parser.parse()
-        
+
         assert test_suite.skipped == 1
 
     def test_parse_test_suite_missing_attributes(self):
@@ -52,7 +52,7 @@ class TestParserTestSuite:
         root = ET.fromstring(xml_content)
         parser = ParserTestSuite(root)
         test_suite = parser.parse()
-        
+
         assert test_suite.name == "TestSuite"
         assert test_suite.tests == 0
         assert test_suite.errors == 0
@@ -68,14 +68,14 @@ class TestParserTestCase:
     def test_parse_basic_test_case(self):
         """Test parsing a basic test case XML element."""
         xml_content = """
-        <testcase name="test_example" classname="TestClass" 
+        <testcase name="test_example" classname="TestClass"
                   time="1.5" timestamp="2023-01-01T00:00:00">
         </testcase>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
         test_case = parser.parse()
-        
+
         assert test_case.name == "test_example"
         assert test_case.test_class == "TestClass"
         assert test_case.execution_time == 1.5
@@ -94,7 +94,7 @@ class TestParserTestCase:
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
         test_case = parser.parse()
-        
+
         assert test_case.result == "failed"
         assert test_case.failure_reason is not None
 
@@ -110,7 +110,7 @@ class TestParserTestCase:
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
         test_case = parser.parse()
-        
+
         assert test_case.result == "error"
         assert test_case.error_reason is not None
 
@@ -126,7 +126,7 @@ class TestParserTestCase:
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
         test_case = parser.parse()
-        
+
         assert test_case.result == "skipped"
         assert test_case.skipped_reason is not None
 
@@ -140,7 +140,7 @@ class TestParserTestCase:
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
         test_case = parser.parse()
-        
+
         assert test_case.system_out == "Console output here"
 
     def test_parse_test_case_missing_attributes(self):
@@ -152,7 +152,7 @@ class TestParserTestCase:
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
         test_case = parser.parse()
-        
+
         assert test_case.name == "test_example"
         assert test_case.test_class == ""
         assert test_case.execution_time == 0.0
@@ -168,11 +168,11 @@ class TestParserTestCase:
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         # Mock the parsing method to raise an exception
         with patch.object(parser, 'get_failure_reason', side_effect=Exception("parse error")):
             test_case = parser.parse()
-            
+
             # Should log warning about parsing failure
             assert mock_logger.warning.called
 
@@ -184,7 +184,7 @@ class TestParserTestCase:
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_testcase_result()
         assert result == "passed"
 
@@ -197,7 +197,7 @@ class TestParserTestCase:
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_testcase_result()
         assert result == "failed"
 
@@ -210,7 +210,7 @@ class TestParserTestCase:
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_testcase_result()
         assert result == "error"
 
@@ -223,7 +223,7 @@ class TestParserTestCase:
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_testcase_result()
         assert result == "skipped"
 
@@ -236,7 +236,7 @@ class TestParserTestCase:
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.find_tag_attribute("failure", "message")
         assert result == "test failed"
 
@@ -249,7 +249,7 @@ class TestParserTestCase:
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.find_tag_attribute("failure")
         assert result == "Failure details"
 
@@ -261,7 +261,7 @@ class TestParserTestCase:
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.find_tag_attribute("failure")
         assert result is None
 
@@ -274,7 +274,7 @@ class TestParserTestCase:
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_failure_reason()
         assert result == "AssertionError: test failed"
 
@@ -289,7 +289,7 @@ Third line">Details</failure>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_failure_reason()
         assert result == "First line"
 
@@ -303,7 +303,7 @@ Third line">Details</failure>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_failure_reason()
         assert result is None
         mock_logger.debug.assert_called()
@@ -317,7 +317,7 @@ Third line">Details</failure>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_skipped_reason()
         assert result == "Not applicable"
 
@@ -331,7 +331,7 @@ Third line">Details</failure>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_skipped_reason()
         assert result is None
         mock_logger.debug.assert_called()
@@ -345,7 +345,7 @@ Third line">Details</failure>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_timestamp()
         assert result == "2023-01-01T00:00:00"
 
@@ -358,7 +358,7 @@ Third line">Details</failure>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_timestamp()
         assert result == "20230101 12:34:56"
 
@@ -372,7 +372,7 @@ Third line">Details</failure>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_timestamp()
         assert result is None
         mock_logger.debug.assert_called()
@@ -386,7 +386,7 @@ Third line">Details</failure>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_system_out()
         assert result == "Console output here"
 
@@ -399,7 +399,7 @@ Third line">Details</failure>
         """
         root = ET.fromstring(xml_content)
         parser = ParserTestCase(root)
-        
+
         result = parser.get_system_out()
         assert result is None
         mock_logger.debug.assert_called()

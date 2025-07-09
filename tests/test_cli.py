@@ -21,7 +21,7 @@ class TestArgsParser:
         """Test add_arguments method."""
         parser = ArgsParser()
         arg_parser = parser.add_arguments()
-        
+
         assert isinstance(arg_parser, argparse.ArgumentParser)
         assert arg_parser.prog == "qa-analytics-insights"
 
@@ -29,7 +29,7 @@ class TestArgsParser:
         """Test parser property."""
         parser = ArgsParser()
         arg_parser = parser.parser
-        
+
         assert isinstance(arg_parser, argparse.ArgumentParser)
         assert parser._parser is not None
 
@@ -38,7 +38,7 @@ class TestArgsParser:
         parser = ArgsParser()
         arg_parser1 = parser.parser
         arg_parser2 = parser.parser
-        
+
         assert arg_parser1 is arg_parser2
 
     @patch('sys.argv', ['qa-analytics-insights', '-f', '/test/path'])
@@ -46,7 +46,7 @@ class TestArgsParser:
         """Test args property."""
         parser = ArgsParser()
         args = parser.args
-        
+
         assert isinstance(args, argparse.Namespace)
         assert args.file_path == '/test/path'
 
@@ -110,9 +110,9 @@ class TestCli:
         mock_args_parser_instance = Mock()
         mock_args_parser_instance.args = Mock()
         mock_args_parser.return_value = mock_args_parser_instance
-        
+
         cli = Cli()
-        
+
         assert cli.args_parser == mock_args_parser_instance
         assert cli.args == mock_args_parser_instance.args
 
@@ -125,17 +125,17 @@ class TestCli:
         mock_analyzer_instance.get_slowest_test_classes.return_value = ["slow_class"]
         mock_analyzer_instance.suites = ["suite1", "suite2"]
         mock_analyzer.return_value = mock_analyzer_instance
-        
+
         mock_visualizer_instance = Mock()
         mock_visualizer.return_value = mock_visualizer_instance
-        
+
         cli = Cli()
         cli.run("/test/path", "/output/path")
-        
+
         # Verify ResultAnalyzer was called
         mock_analyzer.assert_called_once_with("/test/path")
         mock_analyzer_instance.get_slowest_test_classes.assert_called_once()
-        
+
         # Verify ParallelResultVisualizer was called
         mock_visualizer.assert_called_once_with(["suite1", "suite2"])
         mock_visualizer_instance.generate_html_plots.assert_called_once_with("/output/path", ["slow_class"])
@@ -147,18 +147,18 @@ class TestCli:
         """Test cli_main method with verbose flag."""
         cli = Cli()
         cli.run = Mock()
-        
+
         # Mock args
         mock_args = Mock()
         mock_args.verbose = True
         mock_args.file_path = "/test/path"
         mock_args.output = "/output/path"
-        
+
         cli.args_parser = Mock()
         cli.args_parser.parser.parse_args.return_value = mock_args
-        
+
         cli.cli_main(['-f', '/test/path', '-vv'])
-        
+
         mock_verbose_logging.assert_called_once()
         mock_logger.info.assert_called()
         cli.run.assert_called_once_with("/test/path", "/output/path")
@@ -169,18 +169,18 @@ class TestCli:
         """Test cli_main method without verbose flag."""
         cli = Cli()
         cli.run = Mock()
-        
+
         # Mock args
         mock_args = Mock()
         mock_args.verbose = False
         mock_args.file_path = "/test/path"
         mock_args.output = "/output/path"
-        
+
         cli.args_parser = Mock()
         cli.args_parser.parser.parse_args.return_value = mock_args
-        
+
         cli.cli_main(['-f', '/test/path'])
-        
+
         mock_default_logging.assert_called_once()
         cli.run.assert_called_once_with("/test/path", "/output/path")
 
@@ -188,9 +188,9 @@ class TestCli:
         """Test cli_main method with no arguments."""
         cli = Cli()
         cli.args_parser = Mock()
-        
+
         result = cli.cli_main([])
-        
+
         cli.args_parser.usage.assert_called_once()
         assert result is None
 
@@ -198,14 +198,14 @@ class TestCli:
         """Test cli_main method with no file path."""
         cli = Cli()
         cli.args_parser = Mock()
-        
+
         # Mock args with no file_path
         mock_args = Mock()
         mock_args.file_path = None
         cli.args_parser.parser.parse_args.return_value = mock_args
-        
+
         result = cli.cli_main(['-vv'])
-        
+
         cli.args_parser.help.assert_called_once()
         assert result is None
 
@@ -215,9 +215,9 @@ def test_main_function(mock_cli):
     """Test main function."""
     mock_cli_instance = Mock()
     mock_cli.return_value = mock_cli_instance
-    
+
     main(['-f', '/test/path'])
-    
+
     mock_cli.assert_called_once()
     mock_cli_instance.cli_main.assert_called_once_with(args=['-f', '/test/path'])
 

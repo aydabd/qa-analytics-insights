@@ -190,7 +190,7 @@ class ParserTestCase:
             return skipped_message
 
         logger.debug(
-            "Skipped message not found in skipped tag. Test case: {test_case.text}"
+            f"Skipped message not found in skipped tag. Test case: {self.test_case.text}"
         )
         return None
 
