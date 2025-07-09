@@ -77,7 +77,8 @@ class ParserTestCase:
 
         test_module_name = self.test_case.attrib.get("classname", "")
         if test_module_name:
-            test_module_name = test_module_name.split(".")[-2]
+            parts = test_module_name.split(".")
+            test_module_name = parts[-2] if len(parts) >= 2 else ""
 
         test_case_name = self.test_case.attrib.get("name", "")
         test_case_time = float(self.test_case.attrib.get("time", 0))
