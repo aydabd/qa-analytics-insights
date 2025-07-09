@@ -124,7 +124,7 @@ disable_warnings = ["no-data-collected"]
 [tool.coverage.paths]
 source = ["src/", "*/site-packages/"]
 [tool.coverage.report]
-# fail_under = 100
+fail_under = 100
 precision = 0
 show_missing = true
 skip_covered = false

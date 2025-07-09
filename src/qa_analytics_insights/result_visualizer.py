@@ -42,7 +42,7 @@ class ResultVisualizer:
         self.plot = plt
 
     @staticmethod
-    def truncate_name(name: str, max_length: int = 16) -> str:
+    def truncate_name(name: Optional[str], max_length: int = 16) -> str:
         """Truncate long names to prevent visualization overflow.
 
         Args:
@@ -390,7 +390,7 @@ class ResultVisualizer:
             for test_suite in self.test_suites:
                 test_suites_summary.append(
                     (
-                        self.truncate_name(test_suite.name),
+                        self.truncate_name(test_suite.name or "N/A"),
                         test_suite.tests,
                         test_suite.passed,
                         test_suite.failures,

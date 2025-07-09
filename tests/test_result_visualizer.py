@@ -1,7 +1,5 @@
 """Tests for the result visualizer module."""
 
-from unittest.mock import Mock, patch
-
 import matplotlib.pyplot as plt
 import pytest
 
@@ -28,7 +26,9 @@ def sample_test_cases():
         ),
         TestCase(
             name="test_method_3",
-            test_class="AnotherVeryLongTestClassNameThatIsEvenLongerThanSixteenCharacters",
+            test_class=(
+                "AnotherVeryLongTestClassNameThatIsEvenLongerThanSixteenCharacters"
+            ),
             execution_time=0.5,
             result="skipped",
             skipped_reason="Test skipped for some reason",

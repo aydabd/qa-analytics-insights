@@ -1,8 +1,9 @@
 """Sphinx configuration."""
+
 import inspect
 import os
-import sys
 import shutil
+import sys
 
 from docutils import nodes
 
@@ -30,19 +31,21 @@ def update_version_badge(app: object, doctree: object, docname: str) -> None:
         # Identify the image node to update by matching a unique part of its URL
         if 'img.shields.io/badge/qa_analytics_insights-<version>-blue' in original_url:
             # Create a new URL with the updated version information
-            new_url = (
-                f"https://img.shields.io/badge/qa_analytics_insights-{package_version}-blue"
-            )
+            new_url = f"https://img.shields.io/badge/qa_analytics_insights-{package_version}-blue"
 
             # Update the image node URL
             image_node['uri'] = new_url
 
+
 def setup(app):
     app.connect('doctree-resolved', update_version_badge)
 
+
 # -- Path setup --------------------------------------------------------------
 
-__location__ = os.path.join(os.getcwd(), os.path.dirname(inspect.getfile(inspect.currentframe())))
+__location__ = os.path.join(
+    os.getcwd(), os.path.dirname(inspect.getfile(inspect.currentframe()))
+)
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -169,4 +172,3 @@ html_theme_options = {
 htmlhelp_basename = "qa-analytics-insights-doc"
 
 print(f"loading configurations for {project} {version} ...", file=sys.stderr)
-

@@ -77,7 +77,8 @@ class ParserTestCase:
 
         test_module_name = self.test_case.attrib.get("classname", "")
         if test_module_name:
-            test_module_name = test_module_name.split(".")[-2]
+            parts = test_module_name.split(".")
+            test_module_name = parts[-2] if len(parts) >= 2 else ""
 
         test_case_name = self.test_case.attrib.get("name", "")
         test_case_time = float(self.test_case.attrib.get("time", 0))
@@ -169,7 +170,7 @@ class ParserTestCase:
                 return failure_reason
         except Exception as message_parse_exception:
             logger.warning(
-                f"Could not parse {tag} reason from {tag} message."
+                f"Could not parse {tag} reason from {tag} message. "
                 f"Exception: {message_parse_exception}"
             )
             logger.warning(f"Test case: {self.test_case.text}")
@@ -189,7 +190,8 @@ class ParserTestCase:
             return skipped_message
 
         logger.debug(
-            "Skipped message not found in skipped tag. Test case: {test_case.text}"
+            f"Skipped message not found in skipped tag. "
+            f"Test case: {self.test_case.text}"
         )
         return None
 
