@@ -18,11 +18,11 @@ class XMLLoader:
             xml_path: Path to the XML file.
         """
         self.xml_path = xml_path
-        self._tree: Optional[ET.ElementTree[ET.Element]] = None
+        self._tree: Optional[ET.ElementTree] = None
         self._root: Optional[ET.Element] = None
 
     @property
-    def tree(self) -> ET.ElementTree[ET.Element]:  # pragma: no cover
+    def tree(self) -> ET.ElementTree:  # pragma: no cover
         """Returns the XML tree.
 
         Returns:

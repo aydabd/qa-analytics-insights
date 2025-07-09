@@ -42,7 +42,7 @@ class ResultVisualizer:
         self.plot = plt
 
     @staticmethod
-    def truncate_name(name: str, max_length: int = 16) -> str:
+    def truncate_name(name: Optional[str], max_length: int = 16) -> str:
         """Truncate long names to prevent visualization overflow.
 
         Args:
