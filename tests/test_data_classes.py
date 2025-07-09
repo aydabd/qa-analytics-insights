@@ -1,6 +1,5 @@
 """Tests for data_classes module."""
 
-import pytest
 from qa_analytics_insights.data_classes import TestCase, TestClass, TestSuite
 
 
@@ -33,7 +32,7 @@ class TestTestCase:
             failure_reason="assertion error",
             error_reason="runtime error",
             skipped_reason="not applicable",
-            system_out="output text"
+            system_out="output text",
         )
         assert test_case.name == "test_example"
         assert test_case.test_module == "test_module"
@@ -138,7 +137,7 @@ class TestTestSuite:
             failures=2,
             skipped=1,
             execution_time=15.5,
-            timestamp="2023-01-01T00:00:00"
+            timestamp="2023-01-01T00:00:00",
         )
         assert test_suite.name == "test_suite"
         assert test_suite.tests == 10

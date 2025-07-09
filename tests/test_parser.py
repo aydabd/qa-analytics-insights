@@ -1,10 +1,8 @@
 """Tests for parser module."""
 
-import re
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from xml.etree import ElementTree as ET
 
-import pytest
 from qa_analytics_insights.parser import ParserTestCase, ParserTestSuite
 
 
@@ -170,8 +168,10 @@ class TestParserTestCase:
         parser = ParserTestCase(root)
 
         # Mock the parsing method to raise an exception
-        with patch.object(parser, 'get_failure_reason', side_effect=Exception("parse error")):
-            test_case = parser.parse()
+        with patch.object(
+            parser, 'get_failure_reason', side_effect=Exception("parse error")
+        ):
+            parser.parse()
 
             # Should log warning about parsing failure
             assert mock_logger.warning.called

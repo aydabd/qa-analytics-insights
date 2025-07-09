@@ -1,10 +1,10 @@
 """Tests for cli module."""
 
 import argparse
-import sys
 from unittest.mock import Mock, patch
 
 import pytest
+
 from qa_analytics_insights.cli import ArgsParser, Cli, main
 
 
@@ -138,12 +138,16 @@ class TestCli:
 
         # Verify ParallelResultVisualizer was called
         mock_visualizer.assert_called_once_with(["suite1", "suite2"])
-        mock_visualizer_instance.generate_html_plots.assert_called_once_with("/output/path", ["slow_class"])
+        mock_visualizer_instance.generate_html_plots.assert_called_once_with(
+            "/output/path", ["slow_class"]
+        )
 
     @patch('qa_analytics_insights.cli.default_logging')
     @patch('qa_analytics_insights.cli.verbose_logging')
     @patch('qa_analytics_insights.cli.logger')
-    def test_cli_main_with_verbose(self, mock_logger, mock_verbose_logging, mock_default_logging):
+    def test_cli_main_with_verbose(
+        self, mock_logger, mock_verbose_logging, mock_default_logging
+    ):
         """Test cli_main method with verbose flag."""
         cli = Cli()
         cli.run = Mock()

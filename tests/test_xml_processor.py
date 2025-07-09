@@ -1,9 +1,8 @@
 """Tests for xml_processor module."""
 
-from unittest.mock import Mock, patch
 from queue import Queue
+from unittest.mock import Mock, patch
 
-import pytest
 from qa_analytics_insights.xml_processor import XMLProcessor
 
 
@@ -21,7 +20,9 @@ class TestXMLProcessor:
     @patch('qa_analytics_insights.xml_processor.PathFetcher')
     @patch('qa_analytics_insights.xml_processor.XMLFilter')
     @patch('qa_analytics_insights.xml_processor.threading.Thread')
-    def test_process_files_in_parallel(self, mock_thread, mock_xml_filter, mock_path_fetcher):
+    def test_process_files_in_parallel(
+        self, mock_thread, mock_xml_filter, mock_path_fetcher
+    ):
         """Test process_files_in_parallel method."""
         # Setup mocks
         mock_path_fetcher_instance = Mock()

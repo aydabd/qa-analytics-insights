@@ -2,7 +2,6 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
 from qa_analytics_insights.result_analyzer import ResultAnalyzer
 
 
