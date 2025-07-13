@@ -3,7 +3,7 @@
 This module is responsible for loading XML files.
 """
 
-from typing import Optional
+from typing import Optional, cast
 from xml.etree import ElementTree as ET
 
 
@@ -17,7 +17,7 @@ class XMLLoader:
             xml_path: Path to the XML file.
         """
         self.xml_path = xml_path
-        self._tree: Optional[ET.ElementTree] = None
+        self._tree: Optional[ET.ElementTree[ET.Element]] = None
         self._root: Optional[ET.Element] = None
 
     @property
@@ -29,7 +29,7 @@ class XMLLoader:
         """
         if not self._tree:
             self._tree = ET.parse(self.xml_path)
-        return self._tree
+        return cast(ET.ElementTree, self._tree)
 
     @property
     def root(self) -> ET.Element:  # pragma: no cover
@@ -40,4 +40,4 @@ class XMLLoader:
         """
         if not self._root:
             self._root = self.tree.getroot()
-        return self._root
+        return cast(ET.Element, self._root)

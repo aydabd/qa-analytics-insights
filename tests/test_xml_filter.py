@@ -13,7 +13,7 @@ def test_filter_xml() -> None:
     Args:
         xml_filter_instance (XMLFilter): An instance of XMLFilter.
     """
-    path_queue = Queue()
+    path_queue: Queue[Path] = Queue()
     path_queue.put(Path("tests/data/nosetests_test_result.xml"))
     path_queue.put(Path("tests/data/text.txt"))
     xml_filter = XMLFilter(path_queue)
