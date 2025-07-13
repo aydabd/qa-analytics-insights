@@ -158,6 +158,7 @@ def _main(args: Optional[List[str]] = None) -> None:
 def main(args: Optional[List[str]] = None) -> None:
     """Main method for the command line interface."""
     import sys
+
     if sys.modules[__name__].main is not _ORIGINAL_MAIN:
         sys.modules[__name__].main()
         return

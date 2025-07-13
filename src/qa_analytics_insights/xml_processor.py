@@ -9,6 +9,7 @@ from queue import Queue
 from typing import List  # noqa: F401
 
 from loguru import logger
+
 from qa_analytics_insights.data_classes import TestSuite  # noqa: F401
 from qa_analytics_insights.patch_fetcher import PathFetcher
 from qa_analytics_insights.xml_filter import XMLFilter

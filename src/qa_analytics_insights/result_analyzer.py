@@ -112,6 +112,4 @@ class ResultAnalyzer:
         Returns:
             List of TestClass objects.
         """
-        return self.get_execution_times_by_test_class_in_descending_order()[
-            :limit
-        ]
+        return self.get_execution_times_by_test_class_in_descending_order()[:limit]
