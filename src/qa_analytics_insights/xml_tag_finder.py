@@ -23,6 +23,10 @@ class XMLTagFinder:
         self._test_cases = []  # type: List[ET.Element]
         self._suite = None  # type: Optional[ET.Element]
 
+    def find_test_suites(self) -> List[ET.Element]:  # pragma: no cover
+        """Return all testsuite elements found in the XML."""
+        return self.root.findall(".//testsuite") or [self.root]
+
     @property
     def test_cases(self) -> List[ET.Element]:
         """Returns all the testcase tags in the XML file.

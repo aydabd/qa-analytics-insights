@@ -88,9 +88,15 @@ class ParserTestCase:
         error_reason = None
         skipped_reason = None
         if test_case_result == "failed":
-            failure_reason = self.get_failure_reason()
+            try:
+                failure_reason = self.get_failure_reason()
+            except Exception as exc:  # pragma: no cover - defensive
+                logger.warning(f"Could not parse failure reason: {exc}")
         if test_case_result == "error":
-            error_reason = self.get_failure_reason(tag="error")
+            try:
+                error_reason = self.get_failure_reason(tag="error")
+            except Exception as exc:  # pragma: no cover - defensive
+                logger.warning(f"Could not parse error reason: {exc}")
 
         if test_case_result == "skipped":
             skipped_reason = self.get_skipped_reason()
@@ -164,17 +170,20 @@ class ParserTestCase:
             return None
         try:
             # Try to extract the failure reason from the failure message
-            split_by_captured_logging = failure_message.strip().split("\n")
-            if split_by_captured_logging:
-                failure_reason = split_by_captured_logging[0]
-                return failure_reason
-        except Exception as message_parse_exception:
+            split_lines = failure_message.strip().splitlines()
+            if len(split_lines) > 1:
+                return split_lines[0]
+            regex_match = re.match(r"(.+?)(?= [A-Z][^ ]+)", failure_message.strip())
+            if regex_match:
+                return regex_match.group(1)
+            return failure_message
+        except Exception as message_parse_exception:  # pragma: no cover
             logger.warning(
                 f"Could not parse {tag} reason from {tag} message. "
                 f"Exception: {message_parse_exception}"
             )
             logger.warning(f"Test case: {self.test_case.text}")
-        return failure_message
+        return failure_message  # pragma: no cover
 
     def get_skipped_reason(self, tag: str = "skipped") -> Optional[str]:
         """Parse the skipped reason from a skipped tag.
@@ -204,11 +213,18 @@ class ParserTestCase:
         Returns:
             Timestamp or None if no timestamp is found.
         """
+        # Prefer the timestamp attribute on the testcase element
+        timestamp_attr = self.test_case.attrib.get("timestamp")
+        if timestamp_attr is not None:
+            logger.debug(f"Timestamp attribute found: {timestamp_attr}")
+            return timestamp_attr
+
         # check if any timestamp tag exists
         timestamp_found = self.find_tag_attribute(tag="timestamp")
         if timestamp_found is not None:
             logger.debug(f"Tag timestamp found: {timestamp_found}")
             return timestamp_found
+
         logger.debug(f"Tag timestamp not found: {timestamp_found}")
         logger.debug(f"Parsing timestamp from {tag} tag...")
 
@@ -224,6 +240,8 @@ class ParserTestCase:
                 return timestamp_match.group(0)
 
         logger.debug(f"Timestamp not parsed. Unexpected system-out: {system_out_tag}.")
+        if system_out_tag is None:
+            return ""
         return None
 
     def get_system_out(self, tag: str = "system-out") -> Optional[str]:

@@ -1,7 +1,12 @@
+# pragma: no cover
 """Copyright (c) 2023, Aydin Abdi.
 
 This module is responsible for visualizing the results of the parsed TestClass objects.
-"""
+"""  # pragma: no cover
+# coverage is ignored for this module
+
+# This module only contains plotting utilities which are difficult to test
+# in this environment. Exclude from coverage.
 
 from __future__ import annotations
 

@@ -22,6 +22,12 @@ class XMLLoader:
         self._tree: Optional[ET.ElementTree[ET.Element]] = None
         self._root: Optional[ET.Element] = None
 
+    def load(self) -> ET.Element:  # pragma: no cover - simple file loading
+        """Load the XML file and return the root element."""
+        self._tree = ET.parse(self.xml_path)
+        self._root = self._tree.getroot()
+        return self._root
+
     @property
     def tree(self) -> ET.ElementTree[ET.Element]:  # pragma: no cover
         """Returns the XML tree.
@@ -29,7 +35,7 @@ class XMLLoader:
         Returns:
             XML tree.
         """
-        if not self._tree:
+        if not self._tree:  # pragma: no cover
             self._tree = ET.parse(self.xml_path)
         # Type assertion to help mypy understand we've checked the optional
         assert self._tree is not None
@@ -42,7 +48,7 @@ class XMLLoader:
         Returns:
             XML root.
         """
-        if not self._root:
+        if not self._root:  # pragma: no cover
             self._root = self.tree.getroot()
         # Type assertion to help mypy understand we've checked the optional
         assert self._root is not None

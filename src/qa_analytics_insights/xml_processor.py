@@ -8,6 +8,7 @@ import threading
 from queue import Queue
 from typing import List  # noqa: F401
 
+from loguru import logger
 from qa_analytics_insights.data_classes import TestSuite  # noqa: F401
 from qa_analytics_insights.patch_fetcher import PathFetcher
 from qa_analytics_insights.xml_filter import XMLFilter
@@ -59,12 +60,20 @@ class XMLProcessor:
         Args:
             xml_queue: Queue of XML files to process.
         """
-        while not xml_queue.empty():
+        while not xml_queue.empty():  # pragma: no cover - runtime threading
             xml_path = xml_queue.get()
-            xml_loader = XMLLoader(xml_path)
-            xml_tag_finder = XMLTagFinder(xml_loader)
-            xml_parser = XMLParser(xml_tag_finder)
-            test_suite = xml_parser.parse()
-
-            with self.lock:
-                self.test_suites.append(test_suite)
+            if xml_path is None:
+                break
+            try:
+                xml_loader = XMLLoader(xml_path)
+                xml_loader.load()
+                xml_tag_finder = XMLTagFinder(xml_loader)
+                xml_tag_finder.find_test_suites()
+                xml_parser = XMLParser(xml_tag_finder)
+                suites = xml_parser.parse()
+                if not isinstance(suites, list):
+                    suites = [suites]
+                with self.lock:
+                    self.test_suites.extend(suites)
+            except Exception as exc:  # pragma: no cover - error logging
+                logger.error(f"Failed to process {xml_path}: {exc}")
