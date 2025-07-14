@@ -3,6 +3,9 @@ import inspect
 import os
 import sys
 import shutil
+import sphinx_prompt
+
+sys.modules["sphinx-prompt"] = sphinx_prompt
 
 from docutils import nodes
 
@@ -98,7 +101,6 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx_rtd_theme",
     "sphinx.ext.napoleon",
-    "sphinx_prompt",
     "sphinx_tabs.tabs",
     "sphinx_toolbox",
 ]

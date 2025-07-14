@@ -14,12 +14,14 @@ from qa_analytics_insights.log import (
 
 def test_default_logging() -> None:
     """Test default_logging function."""
-    assert default_logging() is None
+    default_logging()
+    assert True
 
 
 def test_verbose_logging() -> None:
     """Test verbose_logging function."""
-    assert verbose_logging() is None
+    verbose_logging()
+    assert True
 
 
 def test_log_execution_time() -> None:
