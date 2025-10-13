@@ -16,12 +16,12 @@ repos:
     args: ['--fix=auto']  # replace 'auto' with 'lf' to enforce Linux/Mac line endings or 'crlf' for Windows
 
 - repo: https://github.com/PyCQA/isort
-  rev: 6.0.1
+  rev: 7.0.0
   hooks:
   - id: isort
 
-- repo: https://github.com/psf/black
-  rev: 25.1.0
+- repo: https://github.com/psf/black-pre-commit-mirror
+  rev: 25.9.0
   hooks:
   - id: black
     language_version: python3
@@ -45,7 +45,7 @@ repos:
     args: [--check-filenames, --ignore-words-list=.codespell-whitelist.txt]
 
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.18.1
+  rev: v1.18.2
   hooks:
   - id: mypy
     exclude: ^tests/
