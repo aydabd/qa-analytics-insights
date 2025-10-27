@@ -108,7 +108,7 @@ jobs:
 
       - name: Upload wheel distribution file as artifacts
         id: wheel-distribution
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: python-distribution-files
           path: dist/
