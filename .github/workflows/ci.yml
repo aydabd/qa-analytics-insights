@@ -131,7 +131,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Retrieve pre-built distribution files
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with: {name: python-distribution-files, path: dist/}
       - name: Publish Package To PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
