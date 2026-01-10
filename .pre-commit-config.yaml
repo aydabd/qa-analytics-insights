@@ -21,7 +21,7 @@ repos:
   - id: isort
 
 - repo: https://github.com/psf/black-pre-commit-mirror
-  rev: 25.11.0
+  rev: 25.12.0
   hooks:
   - id: black
     language_version: python3
@@ -45,7 +45,7 @@ repos:
     args: [--check-filenames, --ignore-words-list=.codespell-whitelist.txt]
 
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.18.2
+  rev: v1.19.1
   hooks:
   - id: mypy
     exclude: ^tests/
