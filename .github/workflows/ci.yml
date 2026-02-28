@@ -60,7 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-versions: [3.9, 3.10.12, 3.11]
+        python-versions: ["3.11", "3.12", "3.13"]
     defaults:
       run:
         shell: bash -el {0}
