@@ -16,7 +16,7 @@ repos:
     args: ['--fix=auto']  # replace 'auto' with 'lf' to enforce Linux/Mac line endings or 'crlf' for Windows
 
 - repo: https://github.com/PyCQA/isort
-  rev: 9.0.0b5
+  rev: 9.0.1
   hooks:
   - id: isort
 
